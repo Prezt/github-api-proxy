@@ -66,4 +66,42 @@ describe('Test /api/users', ()=>{
             expect(response.text).toStrictEqual(mockedResponse.message)
         })
     });
+
+    describe('Test bad requests', () => {
+        it('7) Should work fine when data is an empty array', async () => {
+            const mockedResponse = { data: [] }
+            axios.get.mockResolvedValue(mockedResponse)
+
+            const response = await request.get(`/api/users`)
+            expect(response.status).toBe(200);
+            expect(response.text).toStrictEqual(JSON.stringify(mockedResponse.data))
+        });
+        
+        it('8) Should work fine when data is an empty object', async () => {
+            const mockedResponse = { data: {} }
+            axios.get.mockResolvedValue(mockedResponse)
+
+            const response = await request.get(`/api/users`)
+            expect(response.status).toBe(200);
+            expect(response.text).toStrictEqual(JSON.stringify(mockedResponse.data))
+        })
+
+        it('9) Should work fine when data is non existent', async () => {
+            const mockedResponse = {}
+            axios.get.mockResolvedValue(mockedResponse)
+
+            const response = await request.get(`/api/users`)
+            expect(response.status).toBe(200);
+            expect(response.text).toStrictEqual("")
+        })
+        
+        it('10) Should work fine when calling non existent routes', async () => {
+            const mockedResponse = {}
+            axios.get.mockResolvedValue(mockedResponse)
+
+            const response = await request.get(`/not/existent`)
+            expect(response.status).toBe(404);
+            expect(response.text).toStrictEqual("Not Found")
+        })
+    })
 });
